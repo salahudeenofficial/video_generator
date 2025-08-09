@@ -52,9 +52,9 @@ fi
 echo "🌐 Setting up remote origin..."
 if git remote get-url origin &> /dev/null; then
     echo "Remote origin already exists. Updating..."
-    git remote set-url origin "https://github.com/$github_username/video-generator.git"
+    git remote set-url origin "https://github.com/$github_username/video_generator.git"
 else
-    git remote add origin "https://github.com/$github_username/video-generator.git"
+    git remote add origin "https://github.com/$github_username/video_generator.git"
 fi
 
 # Add all files
