@@ -1,0 +1,37 @@
+#!/bin/bash
+# Install deps
+apt update && apt install -y git ffmpeg
+
+# Clone repo
+git clone https://github.com/Wan-Video/Wan2.1.git
+cd Wan2.1
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+remove torch torchvision torchaudio from requirement.txt
+# Install Python packages
+pip install -r requirements.txt
+pip install "huggingface_hub[cli]"
+
+# Export token before download
+export HF_TOKEN=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
+
+# Download model
+huggingface-cli download Wan-AI/Wan2.1-VACE-14B --local-dir ./Wan2.1-VACE-14B
+mv Wan2.1 Wan2.1-VACE-14B
+
+python generate.py \
+  --task vace-14B \
+  --size 1280*720 \
+  --frame_num 37 \
+  --ckpt_dir ./Wan2.1-VACE-14B \
+  --src_ref_images ./safu.jpg \
+  --src_video ./safu.mp4 \
+  --prompt "" \
+  --offload_model True \
+  --t5_cpu True \
+  --ulysses_size 1 \
+  --sample_steps 8 \
+  --sample_guide_scale 3.0
+  
+  
+  vastai/base-image_cuda-12.1.1-auto/jupyter
+  add decord in requrement.txt
