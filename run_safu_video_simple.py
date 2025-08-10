@@ -73,7 +73,7 @@ def main():
     # Use reference image with control video (extension task) with VRAM optimization
     cmd = [
         "python", vace_script,
-        "--model_name", "vace-1.3B",  # Use smaller model
+        "--model_name", "vace-14B",  # Use high-quality 14B model
         "--size", "720p",
         "--frame_num", str(frame_count),
         "--sample_steps", "10",  # Reduced for faster generation
@@ -102,7 +102,7 @@ def main():
         # Update the command with the correct path
         cmd = [
             "python", vace_script,
-            "--model_name", "vace-1.3B",  # Use smaller model
+            "--model_name", "vace-14B",  # Use high-quality 14B model
             "--size", "720p",
             "--frame_num", str(frame_count),
             "--sample_steps", "10",  # Reduced for faster generation
