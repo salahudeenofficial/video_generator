@@ -50,15 +50,15 @@ def main():
         if read_input.lower() != 'y':
             return False
     
-    # Calculate frame count for 37 seconds (assuming 30 fps)
+    # Calculate frame count for 37 frames (not seconds)
     fps = 30
-    frame_count = 37 * fps  # 37 seconds * 30 fps = 1110 frames
+    frame_count = 37  # 37 frames directly
     
     # Ensure frame count is 4n+1 as required by VACE
     frame_count = ((frame_count - 1) // 4) * 4 + 1
     
     print(f"\n🎥 Video Parameters:")
-    print(f"  Duration: 37 seconds")
+    print(f"  Duration: {frame_count/fps:.2f} seconds")
     print(f"  FPS: {fps}")
     print(f"  Total frames: {frame_count} (adjusted to 4n+1)")
     print(f"  Output size: 720p")
