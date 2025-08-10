@@ -118,9 +118,7 @@ def main():
             "--base_seed", "42",
             "--offload_model", "True",  # Memory optimization - offload to CPU
             "--enable_vram_optimization", "True",  # Enable AutoWrappedModule
-            "--auto_offload", "True",  # Enable automatic offloading
-            "--cpu_offload", "True",  # Enable CPU offloading
-            "--attention_mode", "flash_attention_2"  # Use memory-efficient attention
+            "--auto_offload", "True"  # Enable automatic offloading
         ]
         
         # Run the command
