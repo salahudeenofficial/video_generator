@@ -23,7 +23,8 @@ pycocotools
 timm
 onnxruntime-gpu
 BeautifulSoup4
-
+packaging
+wheel
 # VRAM Optimization Dependencies
 torch-float8>=0.1.0  # For FP8 quantization support
 memory-efficient-attention>=0.1.0  # For memory-efficient attention
