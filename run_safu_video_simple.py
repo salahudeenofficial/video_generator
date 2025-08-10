@@ -93,6 +93,23 @@ def main():
         original_dir = os.getcwd()
         os.chdir(vace_dir)
         
+        # Update the script path since we're now in the VACE directory
+        vace_script = "vace/vace_wan_inference.py"
+        
+        # Update the command with the correct path
+        cmd = [
+            "python", vace_script,
+            "--model_name", "vace-14B",
+            "--size", "720p",
+            "--frame_num", str(frame_count),
+            "--sample_steps", "10",  # Reduced for faster generation
+            "--ckpt_dir", f"../{models_dir}",
+            "--src_video", f"../{control_video}",
+            "--src_ref_images", f"../{reference_image}",
+            "--prompt", "A beautiful animated scene with flowing motion and vibrant colors, maintaining the style and content of the reference image",
+            "--base_seed", "42"
+        ]
+        
         # Run the command
         result = subprocess.run(cmd, capture_output=True, text=True)
         

@@ -125,6 +125,18 @@ else
     git clone https://github.com/YOUR_USERNAME/video_generator.git .
 fi
 
+# Clone VACE repository
+print_header "Cloning VACE repository..."
+if [ -d "VACE" ]; then
+    print_status "VACE repository already exists, pulling latest changes..."
+    cd VACE
+    git pull origin main
+    cd ..
+else
+    print_status "Cloning VACE repository..."
+    git clone https://github.com/ali-vilab/VACE.git
+fi
+
 # Create Python virtual environment
 print_header "Setting up Python virtual environment..."
 python3.10 -m venv python10_env
@@ -146,6 +158,10 @@ fi
 # Install core dependencies
 print_header "Installing core dependencies..."
 pip install -r requirements.txt
+
+# Install VACE dependencies
+print_header "Installing VACE dependencies..."
+pip install wan@git+https://github.com/Wan-Video/Wan2.1
 
 # Install VRAM optimization dependencies
 print_header "Installing VRAM optimization dependencies..."
@@ -448,7 +464,7 @@ echo "3. Run: ./quick_start.sh"
 EOF
 
 chmod +x "$PROJECT_DIR/download_models.sh"
-
+root@52.4.82.21 
 # Final setup verification
 print_header "Running final setup verification..."
 cd "$PROJECT_DIR"
