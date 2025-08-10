@@ -12,6 +12,11 @@ from pathlib import Path
 def main():
     """Generate Safu video using VACE directly"""
     
+    # Set memory optimization environment variables
+    os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
+    os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
+    os.environ["TORCH_CUDNN_V8_API_ENABLED"] = "1"
+    
     print("🎬 Safu Video Generation (Simplified)")
     print("=" * 50)
     
@@ -97,9 +102,9 @@ def main():
         os.chdir(vace_dir)
         
         # Update the script path since we're now in the VACE directory
-        vace_script = "vace/vace_wan_inference.py"
+        vace_script = "vace/vace_wan_inference_optimized.py"
         
-        # Update the command with the correct path
+        # Update the command with the correct path - use optimized version with better memory management
         cmd = [
             "python", vace_script,
             "--model_name", "vace-14B",  # Use high-quality 14B model
@@ -111,7 +116,11 @@ def main():
             "--src_ref_images", f"../{reference_image}",
             "--prompt", "A beautiful animated scene with flowing motion and vibrant colors, maintaining the style and content of the reference image",
             "--base_seed", "42",
-            "--offload_model", "True"  # Memory optimization - offload to CPU
+            "--offload_model", "True",  # Memory optimization - offload to CPU
+            "--enable_vram_optimization", "True",  # Enable AutoWrappedModule
+            "--auto_offload", "True",  # Enable automatic offloading
+            "--cpu_offload", "True",  # Enable CPU offloading
+            "--attention_mode", "flash_attention_2"  # Use memory-efficient attention
         ]
         
         # Run the command
