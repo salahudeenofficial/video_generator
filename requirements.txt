@@ -26,8 +26,8 @@ BeautifulSoup4
 packaging
 wheel
 # VRAM Optimization Dependencies
-torch-float8>=0.1.0  # For FP8 quantization support
-memory-efficient-attention>=0.1.0  # For memory-efficient attention
+# torch-float8>=0.1.0  # For FP8 quantization support
+# memory-efficient-attention>=0.1.0  # For memory-efficient attention
 
 # Additional dependencies for video processing
 Pillow>=9.0.0
