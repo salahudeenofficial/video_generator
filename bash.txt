@@ -12,7 +12,7 @@ pip install -r requirements.txt
 pip install "huggingface_hub[cli]"
 
 # Export token before download
-export HF_TOKEN=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
+export HF_TOKEN=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
 
 # Download model
 huggingface-cli download Wan-AI/Wan2.1-VACE-14B --local-dir ./Wan2.1-VACE-14B
