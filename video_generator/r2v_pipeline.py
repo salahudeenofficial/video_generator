@@ -19,6 +19,9 @@ from pathlib import Path
 VACE_PATH = Path(__file__).parent.parent / "VACE"
 sys.path.insert(0, str(VACE_PATH))
 
+# Add VRAM management
+from .vram_management import MemoryManager, enable_vram_management, VAETiler
+
 try:
     import wan
     from wan.utils.utils import cache_video, cache_image
@@ -54,6 +57,7 @@ class R2VPipeline:
         checkpoint_dir: str = "models/Wan2.1-VACE-14B/",
         device_id: int = 0,
         use_prompt_extend: bool = True,
+        enable_vram_optimization: bool = True,
         **kwargs
     ):
         """
@@ -64,12 +68,18 @@ class R2VPipeline:
             checkpoint_dir: Path to model checkpoint directory
             device_id: GPU device ID
             use_prompt_extend: Whether to use prompt extension
+            enable_vram_optimization: Whether to enable VRAM optimization
             **kwargs: Additional arguments for WanVace initialization
         """
         self.model_name = model_name
         self.checkpoint_dir = checkpoint_dir
         self.device_id = device_id
         self.use_prompt_extend = use_prompt_extend
+        self.enable_vram_optimization = enable_vram_optimization
+        
+        # Initialize VRAM management
+        self.memory_manager = MemoryManager(auto_offload=True, enable_tiling=True)
+        self.vae_tiler = VAETiler(tile_size=512, overlap=64) if self.enable_vram_optimization else None
         
         # Validate model configuration
         self._validate_model_config()
@@ -116,7 +126,24 @@ class R2VPipeline:
             **default_kwargs
         )
         
+        # Apply VRAM optimization if enabled
+        if self.enable_vram_optimization:
+            logger.info("Applying VRAM optimization...")
+            self.model = self.memory_manager.optimize_model(self.model)
+            logger.info("VRAM optimization applied successfully")
+        
         logger.info("Model initialized successfully")
+        
+        # Log memory usage
+        if torch.cuda.is_available():
+            memory_allocated = torch.cuda.memory_allocated() / 1024**3  # GB
+            memory_reserved = torch.cuda.memory_reserved() / 1024**3    # GB
+            logger.info(f"GPU Memory - Allocated: {memory_allocated:.2f} GB, Reserved: {memory_reserved:.2f} GB")
+            
+            # Get optimized memory stats
+            if self.enable_vram_optimization:
+                opt_stats = self.memory_manager.get_memory_stats()
+                logger.info(f"Optimized Memory Stats: {opt_stats}")
     
     def _init_prompt_expander(self):
         """Initialize prompt expander for enhanced prompts"""

@@ -121,6 +121,25 @@ PERFORMANCE_CONFIG = {
     "cpu_threads": 4
 }
 
+# VRAM Management and optimization settings
+VRAM_CONFIG = {
+    "enable_auto_wrapping": True,
+    "enable_vae_tiling": True,
+    "auto_offload": True,
+    "fp8_quantization": False,  # Enable for extreme memory savings
+    "tile_size": 512,
+    "tile_overlap": 64,
+    "context_window_size": 16,  # Frames per context window
+    "context_overlap": 4,       # Overlap between context windows
+    "cache_method": "teacache",  # teacache, magcache, easycache, or none
+    "device_map": {
+        "text_encoder": "cpu",      # Keep text encoder on CPU
+        "vae": "cuda",             # Keep VAE on GPU for speed
+        "unet": "cuda",            # Keep UNet on GPU
+        "controlnet": "cuda",      # Keep ControlNet on GPU
+    }
+}
+
 # Validation rules
 VALIDATION_RULES = {
     "control_video": {

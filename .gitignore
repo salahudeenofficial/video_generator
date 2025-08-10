@@ -76,4 +76,7 @@ logs/
 
 # Temporary files
 *.tmp
-*.temp 
+*.temp
+
+# ComfyUI-WanVideoWrapper (external dependency)
+ComfyUI-WanVideoWrapper/ 
