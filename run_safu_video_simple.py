@@ -67,21 +67,24 @@ def main():
     output_dir = "results/safu_video"
     os.makedirs(output_dir, exist_ok=True)
     
-    # Build VACE command
-    vace_script = os.path.join(vace_dir, "vace", "vace_wan_inference.py")
+    # Build VACE command - use optimized version
+    vace_script = "vace/vace_wan_inference_optimized.py"
     
-    # Use reference image with control video (extension task)
+    # Use reference image with control video (extension task) with VRAM optimization
     cmd = [
         "python", vace_script,
-        "--model_name", "vace-14B",
+        "--model_name", "vace-1.3B",  # Use smaller model
         "--size", "720p",
         "--frame_num", str(frame_count),
         "--sample_steps", "10",  # Reduced for faster generation
-        "--ckpt_dir", models_dir,
-        "--src_video", control_video,
-        "--src_ref_images", reference_image,
+        "--ckpt_dir", f"../{models_dir}",
+        "--src_video", f"../{control_video}",
+        "--src_ref_images", f"../{reference_image}",
         "--prompt", "A beautiful animated scene with flowing motion and vibrant colors, maintaining the style and content of the reference image",
-        "--base_seed", "42"
+        "--base_seed", "42",
+        "--offload_model", "True",  # Memory optimization - offload to CPU
+        "--enable_vram_optimization", "True",  # Enable AutoWrappedModule
+        "--auto_offload", "True"  # Enable automatic offloading
     ]
     
     print(f"\n🚀 Running VACE command:")
@@ -99,7 +102,7 @@ def main():
         # Update the command with the correct path
         cmd = [
             "python", vace_script,
-            "--model_name", "vace-14B",
+            "--model_name", "vace-1.3B",  # Use smaller model
             "--size", "720p",
             "--frame_num", str(frame_count),
             "--sample_steps", "10",  # Reduced for faster generation
@@ -107,7 +110,8 @@ def main():
             "--src_video", f"../{control_video}",
             "--src_ref_images", f"../{reference_image}",
             "--prompt", "A beautiful animated scene with flowing motion and vibrant colors, maintaining the style and content of the reference image",
-            "--base_seed", "42"
+            "--base_seed", "42",
+            "--offload_model", "True"  # Memory optimization - offload to CPU
         ]
         
         # Run the command
