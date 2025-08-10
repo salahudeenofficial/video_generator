@@ -25,16 +25,47 @@ onnxruntime-gpu
 BeautifulSoup4
 packaging
 wheel
+
+# VACE Framework Dependencies
+wan@git+https://github.com/Wan-Video/Wan2.1
+matplotlib>=3.5.0
+scipy>=1.9.0
+PIL>=9.0.0
+Pillow>=9.0.0
+opencv-python>=4.8.0
+numpy>=1.21.0
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+transformers>=4.21.0
+diffusers>=0.21.0
+accelerate>=0.20.0
+xformers>=0.0.20
+safetensors>=0.3.0
+omegaconf>=2.2.0
+einops>=0.6.0
+timm>=0.6.0
+tqdm>=4.64.0
+scikit-image>=0.19.0
+scikit-learn>=1.1.0
+opencv-python>=4.6.0
+ffmpeg-python>=0.2.0
+imageio>=2.19.0
+imageio-ffmpeg>=0.4.0
+decord>=0.6.0
+einops>=0.6.0
+timm>=0.6.0
+pycocotools>=2.0.6
+BeautifulSoup4>=4.11.0
+packaging>=21.0
+wheel>=0.37.0
+
 # VRAM Optimization Dependencies
 # torch-float8>=0.1.0  # For FP8 quantization support
 # memory-efficient-attention>=0.1.0  # For memory-efficient attention
 
 # Additional dependencies for video processing
-Pillow>=9.0.0
 ffmpeg-python>=0.2.0
-
-# VACE specific dependencies
-wan@git+https://github.com/Wan-Video/Wan2.1
 
 # Optional: LTX-Video support (may conflict with Wan)
 # ltx-video@git+https://github.com/Lightricks/LTX-Video@ltx-video-0.9.1
