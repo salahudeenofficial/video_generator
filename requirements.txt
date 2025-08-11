@@ -9,6 +9,9 @@ accelerate>=1.1.1
 gradio>=5.0.0
 numpy>=1.23.5,<2
 tqdm
+packaging
+wheel
+
 imageio
 easydict
 ftfy
@@ -23,8 +26,6 @@ pycocotools
 timm
 onnxruntime-gpu
 BeautifulSoup4
-packaging
-wheel
 
 # VACE Framework Dependencies
 wan@git+https://github.com/Wan-Video/Wan2.1
