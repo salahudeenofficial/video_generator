@@ -227,7 +227,7 @@ def main(args):
             [None if args.src_ref_images is None else args.src_ref_images.split(',')],
             args.frame_num, 
             size_config, 
-            model.device_id
+            model.device
         )
         
         # Generate video
