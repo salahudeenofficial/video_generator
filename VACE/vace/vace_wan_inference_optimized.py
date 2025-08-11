@@ -213,7 +213,7 @@ def main(args):
     
     # Get size configuration
     size_config = SIZE_CONFIGS[args.size]
-    max_area = MAX_AREA_CONFIGS[args.model_name][args.size]
+    max_area = MAX_AREA_CONFIGS[args.size]
     
     # Process input
     if args.src_video is not None:
