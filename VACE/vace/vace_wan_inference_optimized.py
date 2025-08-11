@@ -10,6 +10,10 @@ import os
 import sys
 import warnings
 
+# Set PyTorch memory optimization environment variables
+os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'
+os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
+
 warnings.filterwarnings('ignore')
 
 import torch, random
@@ -43,14 +47,14 @@ def validate_args(args):
 
     # The default sampling steps are 40 for image-to-video tasks and 50 for text-to-video tasks.
     if args.sample_steps is None:
-        args.sample_steps = 50
+        args.sample_steps = 20  # Reduced from 50 to save memory
 
     if args.sample_shift is None:
         args.sample_shift = 16
 
     # The default number of frames are 1 for text-to-image tasks and 81 for other tasks.
     if args.frame_num is None:
-        args.frame_num = 81
+        args.frame_num = 25  # Reduced from 81 to save memory (must be 4n+1)
 
     args.base_seed = args.base_seed if args.base_seed >= 0 else random.randint(
         0, sys.maxsize)

@@ -10,6 +10,7 @@ import os
 import sys
 import warnings
 import types
+import gc
 from functools import partial
 from contextlib import contextmanager
 
@@ -77,6 +78,12 @@ class WanVaceOptimized(WanVace):
             use_usp=use_usp,
             t5_cpu=t5_cpu
         )
+        
+        # Enable gradient checkpointing to reduce memory usage
+        if hasattr(self, 'model') and self.model is not None:
+            self.model.gradient_checkpointing = True
+        if hasattr(self, 'text_encoder') and self.text_encoder is not None:
+            self.text_encoder.gradient_checkpointing = True
         
         self.enable_vram_optimization = enable_vram_optimization
         self.auto_offload = auto_offload
