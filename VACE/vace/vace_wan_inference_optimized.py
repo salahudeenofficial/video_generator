@@ -195,7 +195,7 @@ def main(args):
     else:
         model = WanVaceOptimized(
             config=config,
-            checkpoint_dir=args.ckpt_dir,
+            checkpoint_dir=args.ckpt_dir.replace('../', './'),  # Fix relative path
             enable_vram_optimization=args.enable_vram_optimization,
             auto_offload=args.auto_offload,
             device_map=None  # Auto-detect optimal device mapping
@@ -219,26 +219,32 @@ def main(args):
     if args.src_video is not None:
         # Video-to-video generation
         logging.info(f"🎬 Processing source video: {args.src_video}")
-        src_video = cache_video(args.src_video)
-        src_ref_images = None
-        if args.src_ref_images is not None:
-            src_ref_images = [cache_image(img.strip()) for img in args.src_ref_images.split(',')]
+        
+        # Use the model's prepare_source method like the original script
+        src_video, src_mask, src_ref_images = model.prepare_source(
+            [args.src_video],
+            [None],  # No mask
+            [None if args.src_ref_images is None else args.src_ref_images.split(',')],
+            args.frame_num, 
+            size_config, 
+            model.device_id
+        )
         
         # Generate video
         logging.info("🚀 Starting video generation with VRAM optimization...")
         start_time = time.time()
         
         result = model.generate(
-            input_prompt=args.prompt or "",
-            input_frames=src_video,
-            input_masks=None,
-            input_ref_images=src_ref_images,
+            args.prompt or "",
+            src_video,
+            src_mask,
+            src_ref_images,
             size=size_config,
             frame_num=args.frame_num,
+            shift=16,  # Default shift value
             sample_solver='unipc',
             sampling_steps=args.sample_steps,
             guide_scale=5.0,
-            n_prompt="",
             seed=args.base_seed,
             offload_model=args.offload_model
         )
