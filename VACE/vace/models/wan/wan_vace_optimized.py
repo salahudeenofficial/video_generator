@@ -96,32 +96,35 @@ class WanVaceOptimized(WanVace):
         logging.info("Applying VRAM optimization with AutoWrappedModule...")
         
         try:
-            # Optimize the main model
-            if hasattr(self, 'model') and self.model is not None:
-                self.model = enable_vram_management_recursively(
-                    self.model,
-                    device_map=self.device_map,
-                    auto_offload=self.auto_offload
-                )
-                logging.info("✅ Main model optimized with AutoWrappedModule")
+            # Only optimize the VAE and text encoder, leave the main model untouched
+            # to avoid breaking the internal forward pass logic
             
             # Optimize VAE
             if hasattr(self, 'vae') and self.vae is not None:
-                self.vae = enable_vram_management_recursively(
-                    self.vae,
-                    device_map=self.device_map,
-                    auto_offload=self.auto_offload
-                )
-                logging.info("✅ VAE optimized with AutoWrappedModule")
+                try:
+                    self.vae = enable_vram_management_recursively(
+                        self.vae,
+                        device_map=self.device_map,
+                        auto_offload=self.auto_offload
+                    )
+                    logging.info("✅ VAE optimized with AutoWrappedModule")
+                except Exception as e:
+                    logging.warning(f"VAE optimization failed: {e}")
             
             # Optimize text encoder
             if hasattr(self, 'text_encoder') and self.text_encoder is not None:
-                self.text_encoder = enable_vram_management_recursively(
-                    self.text_encoder,
-                    device_map=self.device_map,
-                    auto_offload=self.auto_offload
-                )
-                logging.info("✅ Text encoder optimized with AutoWrappedModule")
+                try:
+                    self.text_encoder = enable_vram_management_recursively(
+                        self.text_encoder,
+                        device_map=self.device_map,
+                        auto_offload=self.auto_offload
+                    )
+                    logging.info("✅ Text encoder optimized with AutoWrappedModule")
+                except Exception as e:
+                    logging.warning(f"Text encoder optimization failed: {e}")
+            
+            # Don't optimize the main model to avoid breaking forward pass
+            logging.info("⚠️  Main model left unoptimized to preserve compatibility")
                 
         except Exception as e:
             logging.warning(f"VRAM optimization failed: {e}")

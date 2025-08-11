@@ -196,7 +196,7 @@ def main(args):
         model = WanVaceOptimized(
             config=config,
             checkpoint_dir=args.ckpt_dir.replace('../', './'),  # Fix relative path
-            enable_vram_optimization=False,  # Disable VRAM optimization for now to avoid compatibility issues
+            enable_vram_optimization=True,  # Re-enable VRAM optimization to handle memory issues
             auto_offload=args.auto_offload,
             device_map=None  # Auto-detect optimal device mapping
         )
